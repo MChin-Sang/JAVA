@@ -99,7 +99,10 @@ public class StudentProcess {
         Map<String, List<Student>> studentsByDepartment = studentList
                 .stream()
                 .collect(Collectors.groupingBy(Student::getDepartment));
-        System.out.println(studentsByDepartment);
+                studentsByDepartment.forEach((k,v)-> {
+                    System.out.println(k);
+                    v.forEach(s -> System.out.println("\t" + s));
+                });
         /*
          * Task 8: Count and display the number of Students in each department.
          */
@@ -107,7 +110,9 @@ public class StudentProcess {
         Map<String, Long> temp = studentList
                 .stream()
                 .collect(Collectors.groupingBy(Student::getDepartment, Collectors.counting()));
-        System.out.println(temp);
+        temp.forEach((k,v)->{
+            System.out.println(k + " has " + v +" Student(s)");
+        });
         /*
          * Task 9: Calculate and display the sum of all Students’ grades.
          */
