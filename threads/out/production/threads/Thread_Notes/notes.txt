@@ -1,0 +1,12 @@
+- Both join and sleep throw 'InterruptedException'
+
+#############################################################
+###   “implements Runnable” vs “extends Thread” in Java   ###
+#############################################################
+
+- implements Runnable is the preferred way to do it. You're not really specialising the thread's behaviour.
+You're just giving it something to run. That means composition is the philosophically "purer" way to go.
+
+In practical terms, it means you can implement Runnable and extend from another class as well.
+
+
