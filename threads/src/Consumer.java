@@ -1,23 +1,25 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Consumer {
-    private boolean isGood;
+    private List<String> fund = new ArrayList<>();
 
-    public Consumer(boolean isGood) {
-        this.isGood = isGood;
+    public Consumer() { }
+
+    public void withdraw(List<String> moneyFromAccount) {
+        fund.addAll(moneyFromAccount);
     }
 
-    public boolean getIsGood() {
-        return this.isGood;
+    public void display() {
+        fund.stream().forEach(System.out::println);
     }
 
-    public void setIsGood(boolean isGood) {
-        this.isGood = isGood;
-    }
-    public double consume() throws InterruptedException {
-        // while account is equal to zero meaning current state of isGood is false
-        while (isGood == true) {
-            System.out.println(Thread.currentThread().getName() + " is waiting for money to be deposited");
-            Thread.currentThread().wait();
-        }
-        setIsGood(true);
+    public static void main(String[] args) {
+        String [] funds = {"Dollar", "Euro"};
+        Consumer c = new Consumer();
+        c.withdraw(Arrays.asList(funds));
+        String [] funds2 = {"Blah", "Blah"};
+        c.withdraw((Arrays.asList(funds2)));
     }
 }
