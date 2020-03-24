@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class Consumer {
@@ -7,12 +8,20 @@ public class Consumer {
 
     public Consumer() { }
 
-    public void withdraw(List<String> moneyFromAccount) {
-        fund.addAll(moneyFromAccount);
+    public List<String> withdraw(List<String> moneyFromAccount) {
+        Iterator<String> itr = moneyFromAccount.iterator();
+
+        while (itr.hasNext()) {
+            String i = itr.next();
+            fund.add(i);
+            itr.remove();
+        }
+
+        return moneyFromAccount;
     }
 
     public void display() {
-        fund.stream().forEach(System.out::println);
+        fund.stream().forEach(s -> System.out.println("-->" + s));
     }
 
     public static void main(String[] args) {
