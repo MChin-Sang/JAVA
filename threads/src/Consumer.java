@@ -8,16 +8,14 @@ public class Consumer {
 
     public Consumer() { }
 
-    public List<String> withdraw(List<String> moneyFromAccount) {
+    public void withdraw(List<String> moneyFromAccount) {
         Iterator<String> itr = moneyFromAccount.iterator();
 
-        while (itr.hasNext()) {
+        if (itr.hasNext()) {
             String i = itr.next();
             fund.add(i);
             itr.remove();
         }
-
-        return moneyFromAccount;
     }
 
     public void display() {

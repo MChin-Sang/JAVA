@@ -9,40 +9,79 @@ import java.util.*;
 public class Producer {
     private List<String> funds;
     private final String EMPTY_STATE = "NO FUNDS";
+    private String compareCurrency;
 
     public Producer(String[] funds) {
         if (funds.length == 0) {
             this.funds = new ArrayList<>(Arrays.asList(EMPTY_STATE));
         } else {
             this.funds = new ArrayList<String>(Arrays.asList(funds));
+            this.compareCurrency = this.funds.get(0);
         }
     }
 
+    // return true if there is more of the last deposited currency type
+    public boolean checkCurrency() {
+        boolean found = false;
+        for (int i = 0; i < funds.size() && found == false; i++) {
+            if (funds.get(i).equals(compareCurrency)) {
+                found = true;
+            }
+        }
+        return found;
+    }
 
-    public List<String> deposit() {
+    public void deposit(List<String> balance) {
         if (funds.isEmpty()) {
             funds.add(EMPTY_STATE);
         }
         if (!funds.get(0).equals(EMPTY_STATE)) {
-            String compare = funds.get(0);
-            List<String> sendList = new ArrayList<>();
-
+            boolean found = false;
             Iterator<String> itr = funds.iterator();
 
-            while (itr.hasNext()) {
+            while (itr.hasNext() && !found) {
                 String s = (String) itr.next();
-                if (s.equals(compare)) {
-                    sendList.add(s);
+                if (s.equals(compareCurrency)) {
+                    balance.add(s);
                     itr.remove();
+                    found = true;
+                    if (itr.hasNext()) {
+                        compareCurrency = itr.next();
+                    } else {
+                        compareCurrency = s;
+                    }
                 }
             }
             if (funds.isEmpty()) {
                 funds.add(EMPTY_STATE);
             }
-            return sendList;
         }
-        return funds;
     }
+//        if (funds.isEmpty()) {
+//            funds.add(EMPTY_STATE);
+//        }
+//        if (!funds.get(0).equals(EMPTY_STATE)) {
+//            String compare = funds.get(0);
+//            lastCurrency = compare;
+//
+//            List<String> sendList = new ArrayList<>();
+//
+//            Iterator<String> itr = funds.iterator();
+//
+//            while (itr.hasNext()) {
+//                String s = (String) itr.next();
+//                if (s.equals(compare)) {
+//                    sendList.add(s);
+//                    itr.remove();
+//                }
+//            }
+//            if (funds.isEmpty()) {
+//                funds.add(EMPTY_STATE);
+//            }
+//            return sendList;
+//        }
+//        return funds;
+
 
     public void display() {
         if (!hasMoreFunds()) {
@@ -60,10 +99,5 @@ public class Producer {
     public static void main(String[] args) {
         String[] funds = {"Dollar", "Euro", "Euro", "Pound", "Pound", "Pound"};
         Producer p = new Producer(funds);
-        List<String> newFunds = p.deposit();
-        for (String s : newFunds)
-            System.out.println(s);
-        System.out.println("\n");
-        p.display();
     }
 }

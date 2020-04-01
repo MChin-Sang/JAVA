@@ -15,8 +15,11 @@ public class Account {
     }
 
     public void deposit() throws InterruptedException {
+        // Continue to deposit as long as producer has money in their account
         while (producer.hasMoreFunds()) {
             synchronized (this) {
+                // Producer can deposit, 1 at a time, a single type of currency to the account and must not add a different
+                // type of currency until all of the previous currency is withdrawn
                 while (!writeable) {
                     System.out.println("*** " + Thread.currentThread().getName() + " is waiting for funds to be withdrawn ***\n");
                     wait();
@@ -25,18 +28,19 @@ public class Account {
                 if (balance.size() == 1 && balance.get(0).equals("EMPTY")) {
                     balance.remove(0);
                 }
+                if (producer.checkCurrency()) {
+                    producer.deposit(balance);
 
-                writeable = false;
-                balance.addAll(producer.deposit());
-                System.out.println();
+                    System.out.println("\nDeposit By Producer:");
+                    for (String s : balance)
+                        System.out.println("[+ADDED] to account a: " + s);
+                    System.out.println("\nProducer now has: ");
+                    producer.display();
+                    System.out.println();
 
-                System.out.println("Deposit By Producer:");
-                for (String s : balance)
-                    System.out.println("[+ADDED] to account a: " + s);
-                System.out.println("\nProducer now has: ");
-                producer.display();
-                System.out.println();
-                notify();
+                    writeable = false;
+                    notify();
+                }
             }
         }
     }
@@ -48,15 +52,22 @@ public class Account {
                     System.out.println("\n*** " + Thread.currentThread().getName() + " is waiting for funds to be deposited ***");
                     wait();
                 }
-                writeable = true;
 
                 System.out.println("Withdraw By Consumer:");
                 for (String s : balance)
                     System.out.println("[-REMOVED] from account a: " + s);
+
                 consumer.withdraw(balance);
+
                 System.out.println("\nConsumer now has: ");
                 consumer.display();
-                notify();
+
+                // set writeable to true (consumer must wait) when there is no money in the account
+                if (balance.size() == 0) {
+                    writeable = true;
+                    notify();
+                }
+
             }
     }
 }
