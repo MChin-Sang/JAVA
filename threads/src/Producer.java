@@ -9,29 +9,34 @@ import java.util.*;
 public class Producer {
     private List<String> funds;
     private final String EMPTY_STATE = "NO FUNDS";
-    private String compareCurrency;
+    public String lastCurrencyAdded;
 
     public Producer(String[] funds) {
         if (funds.length == 0) {
             this.funds = new ArrayList<>(Arrays.asList(EMPTY_STATE));
         } else {
             this.funds = new ArrayList<String>(Arrays.asList(funds));
-            this.compareCurrency = this.funds.get(0);
+            this.lastCurrencyAdded = this.funds.get(0);
         }
+    }
+
+    public void setNewCurrency() {
+        lastCurrencyAdded = funds.get(0);
     }
 
     // return true if there is more of the last deposited currency type
     public boolean checkCurrency() {
         boolean found = false;
-        for (int i = 0; i < funds.size() && found == false; i++) {
-            if (funds.get(i).equals(compareCurrency)) {
+        for (int i = 0; i < funds.size() && !found; i++) {
+            if (funds.get(i).equals(lastCurrencyAdded)) {
                 found = true;
             }
         }
         return found;
     }
 
-    public void deposit(List<String> balance) {
+    public String deposit(List<String> balance) {
+        String temp = "";
         if (funds.isEmpty()) {
             funds.add(EMPTY_STATE);
         }
@@ -40,22 +45,20 @@ public class Producer {
             Iterator<String> itr = funds.iterator();
 
             while (itr.hasNext() && !found) {
-                String s = (String) itr.next();
-                if (s.equals(compareCurrency)) {
+                String s = itr.next();
+                if (s.equals(lastCurrencyAdded)) {
                     balance.add(s);
+                    temp = s;
+                    lastCurrencyAdded = s;
                     itr.remove();
                     found = true;
-                    if (itr.hasNext()) {
-                        compareCurrency = itr.next();
-                    } else {
-                        compareCurrency = s;
-                    }
                 }
             }
             if (funds.isEmpty()) {
                 funds.add(EMPTY_STATE);
             }
         }
+        return temp;
     }
 //        if (funds.isEmpty()) {
 //            funds.add(EMPTY_STATE);
