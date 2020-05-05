@@ -57,6 +57,7 @@ public class Demo {
                 WebElement searchBar = driver.findElement(By.cssSelector("input.promoted-search__input"));
                 searchBar.sendKeys("Password issue...");
                 Thread.sleep(2000);
+                driver.close();
             }
         }
 
@@ -64,16 +65,18 @@ public class Demo {
         driver.switchTo().window(originalHandle);
         Thread.sleep(1000);
 
-        String actualTitle = driver.getTitle();
-        String compareTitle = "gmail";
-
+        // compare the current handle to expected title of "gmail"
+        // pass if they are equal
+        String currentTitle = driver.getTitle();
+        String expectedTitle = "gmail";
         Thread.sleep(1000);
+
         driver.quit();
 
-        if (actualTitle.equalsIgnoreCase(compareTitle)) {
-            System.out.println("Test Pass: " + "[" + "compareTitle: " + compareTitle + ", actualTitle: " + actualTitle + "]");
+        if (currentTitle.equalsIgnoreCase(expectedTitle)) {
+            System.out.println("Test Pass: " + "[" + "expectedTitle: " + expectedTitle + ", currentTitle: " + currentTitle + "]");
         } else {
-            System.out.println("Test Fail: " + "[" + "compareTitle: " + compareTitle + ", actualTitle: " + actualTitle + "]");
+            System.out.println("Test Fail: " + "[" + "expectedTitle: " + expectedTitle + ", currentTitle: " + currentTitle + "]");
         }
 
     }
