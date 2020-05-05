@@ -2,6 +2,26 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+/**
+ * ******** NOTES *********
+ * Synchronization
+ * implicit and explicit wait:
+ *
+ * Implicit waits:
+ *      driver.manage().timeouts().implicitlyWait(TimeOut, TimeUnit.SECONDS);
+ *      - TimeOut is the time to wait as an integer
+ *      - TimeUnit.SECONDS is the unit of measure
+ *      - This will wait for the exact time specified so it could end up waiting too long
+ *
+ * Explicit waits:
+ *      WebDriverWait wait = new WebDriverWait(driver, 10); // declares wait object
+ *      WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("elementID")); // condition
+ *      - 10 represents the max time to wait
+ *      - This method will wait up to the max or until the condition specified is met
+ */
 
 public class Demo {
     public static void main(String[] args) throws InterruptedException {
@@ -23,12 +43,21 @@ public class Demo {
 
         // find next button by class name
         driver.findElement(By.className("CwaK9")).click();
-        Thread.sleep(3000);
-
-        // Enter the password
-        WebElement password = driver.findElement(By.cssSelector("input[type='password']"));
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        // explicitly wait for element to be loaded
+        WebElement password = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='password']")));
         password.sendKeys("WRONG_PASSWORD");
         Thread.sleep(1000);
+
+        // originally had below to wait for elements to appear
+        //
+        // Thread.sleep(3000);
+        // Enter the password
+        // WebElement password = driver.findElement(By.cssSelector("input[type='password']"));
+        // password.sendKeys("WRONG_PASSWORD");
+        // Thread.sleep(1000);
+        //
+        //////////////////////////
 
         // show password
         // span represented by multiple classes
@@ -44,7 +73,6 @@ public class Demo {
         // ul is parent and identified by class="Bgzgmd" and we are going into the first li child - help link
         WebElement helpLink = driver.findElement(By.cssSelector("ul.Bgzgmd li:nth-child(1)"));
         helpLink.click();
-        Thread.sleep(2000);
 
         // store main handle before switch to help page
         String originalHandle = driver.getWindowHandle();
@@ -54,8 +82,9 @@ public class Demo {
             if (!h.equalsIgnoreCase(originalHandle)) {
                 // work on new window - help
                 driver.switchTo().window(h);
-                WebElement searchBar = driver.findElement(By.cssSelector("input.promoted-search__input"));
-                searchBar.sendKeys("Password issue...");
+                WebElement searchBar = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input.promoted-search__input")));
+                // **PREVIOUS** WebElement searchBar = driver.findElement(By.cssSelector("input.promoted-search__input"));
+                searchBar.sendKeys("Password issue help...");
                 Thread.sleep(2000);
                 driver.close();
             }
