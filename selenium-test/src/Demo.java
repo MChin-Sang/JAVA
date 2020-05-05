@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -68,6 +69,13 @@ public class Demo {
         // click next button
         driver.findElement(By.cssSelector("span.CwaK9")).click();
         Thread.sleep((1000));
+
+        // use xpath to get alert span on incorrect password
+        // Assert.assertEquals used to compare the values inside alert
+        WebElement passwordAlert = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"view_container\"]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div[2]/div[2]/span")));
+        String passwordAlertText = passwordAlert.getText();
+        String expectedAlertText = "Wrong password. Try again or click Forgot password to reset it.";
+        Assert.assertEquals(expectedAlertText, passwordAlertText);
 
         // click help link
         // ul is parent and identified by class="Bgzgmd" and we are going into the first li child - help link
