@@ -39,7 +39,7 @@ public class Account {
     public synchronized void withdraw() throws InterruptedException {
         while (producer.hasMoreFunds() || balance.size() != 0) {
             synchronized (this) {
-                while (balance.size() == 0 || balance.get(0) == "EMPTY") {
+                while (balance.size() == 0 || balance.get(0).equals("EMPTY")) {
                     System.out.println("\n*** " + Thread.currentThread().getName() + " is waiting for funds to be deposited ***");
                     wait();
                 }

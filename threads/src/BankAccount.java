@@ -27,8 +27,8 @@ public class BankAccount {
                 e.printStackTrace();
             }
         }, "Withdrawer");
-
-        t1.start();
         t2.start();
+        t1.start();
+
     }
 }
