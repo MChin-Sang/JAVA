@@ -15,16 +15,17 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  *      driver.manage().timeouts().implicitlyWait(TimeOut, TimeUnit.SECONDS);
  *      - TimeOut is the time to wait as an integer
  *      - TimeUnit.SECONDS is the unit of measure
- *      - This will wait for the exact time specified so it could end up waiting too long
+ *      - An explicit waits is code you define to wait for a certain condition to occur before proceeding further in the code.
  *
  * Explicit waits:
  *      WebDriverWait wait = new WebDriverWait(driver, 10); // declares wait object
  *      WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("elementID")); // condition
  *      - 10 represents the max time to wait
- *      - This method will wait up to the max or until the condition specified is met
+ *      - An implicit wait is to tell WebDriver to poll the DOM for a certain amount of time when trying to find an
+ *        element or elements if they are not immediately available.
  */
 
-public class Demo {
+public class GmailTest {
     public static void main(String[] args) throws InterruptedException {
         // set the location of my local download of chrome driver
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\micha\\Desktop\\RBC\\selenium2\\chromedriver_win32\\chromedriver.exe");
